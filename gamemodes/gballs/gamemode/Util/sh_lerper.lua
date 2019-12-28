@@ -1,0 +1,66 @@
+INTERPOLATION = {
+    Linear = 1,
+    SmoothStep = 2,
+    SmootherStep = 3,
+    SinLerp = 4,
+    CosLerp = 5,
+    Exponential = 6
+}
+
+local function GetInterpolationValue(t, interpolation)
+    if interpolation == INTERPOLATION.SinLerp then
+        return math.sin(t * math.pi * 0.5)
+    elseif interpolation == INTERPOLATION.CosLerp then
+        return 1 - math.cos(t * math.pi * 0.5)
+    elseif interpolation == INTERPOLATION.Exponential then
+        return t * t
+    elseif interpolation == INTERPOLATION.SmoothStep then
+        return t * t * (3 - 2 * t)
+    elseif interpolation == INTERPOLATION.SmootherStep then
+        return t * t * t * (t * (6 * t - 15) + 10)
+    else
+        return t
+    end
+end
+
+function LerpFloat(pointA, pointB, time, callback, typeOfInterpolation, onComplete)
+    local endTime = CurTime() + time
+    local ID = tostring(CurTime() + math.random(1, 9999))
+
+    hook.Add("Think", "DoALerp" .. ID, function()
+        local percentage = math.Clamp(1 - (endTime - CurTime()) / time, 0, 1)
+
+        if percentage < 1 then
+            callback(Lerp(GetInterpolationValue(percentage, typeOfInterpolation), pointA, pointB))
+        else
+            callback(pointB)
+
+            if onComplete then
+                onComplete()
+            end
+
+            hook.Remove("Think", "DoALerp" .. ID)
+        end
+    end)
+end
+
+function LerpColor(colorA, colorB, time, callback, typeOfInterpolation, onComplete)
+    local endTime = CurTime() + time
+    local ID = tostring(CurTime() + math.random(1, 9999))
+
+    hook.Add("Think", "DoALerp" .. ID, function()
+        local percentage = math.Clamp(1 - (endTime - CurTime()) / time, 0, 1)
+
+        if percentage < 1 then
+            callback(Color(Lerp(GetInterpolationValue(percentage, typeOfInterpolation), colorA.r, colorB.r), Lerp(GetInterpolationValue(percentage, typeOfInterpolation), colorA.g, colorB.g), Lerp(GetInterpolationValue(percentage, typeOfInterpolation), colorA.b, colorB.b), Lerp(GetInterpolationValue(percentage, typeOfInterpolation), colorA.a, colorB.a)))
+        else
+            callback(colorB)
+
+            if onComplete then
+                onComplete()
+            end
+
+            hook.Remove("Think", "DoALerp" .. ID)
+        end
+    end)
+end

@@ -1,0 +1,7 @@
+"gballs"
+{
+	"base"		"base"
+	"title"		"gBalls"
+	"maps"		"^gb_"
+	"menusystem"	"1"
+}

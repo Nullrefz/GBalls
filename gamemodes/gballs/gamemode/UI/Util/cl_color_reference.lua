@@ -1,0 +1,11 @@
+gb = {}
+gb.menuColor = Color(255,255,255, 255)
+gb.sandboxColor = Color(0, 150, 255, 255)
+gb.blackNotch0 = Color(0,0,0,255)
+gb.blackNotch1 = Color(25,25,25,255)
+gb.blackNotch2 = Color(54, 54, 54, 255)
+gb.blackNotch3 = Color(64, 64, 64, 255)
+gb.tabDiselected = Color(64, 64, 64, 255)
+gb.tabSelected = Color(128, 128, 128, 255)
+gb.tabActive = Color(50, 255, 100, 255)
+gb.tabInactive = Color(22, 22, 22, 255)
