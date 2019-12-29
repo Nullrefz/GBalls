@@ -1,6 +1,6 @@
 CreateConVar("gb_camera_distance", 64, FCVAR_USERINFO)
 CreateConVar("gb_camera_z", 30, FCVAR_USERINFO)
-CreateConVar("gb_angle", "45", FCVAR_USERINFO)
+CreateConVar("gb_angle", 45, FCVAR_USERINFO)
 
 local FollowMode = {
     SINGLE = 1,
