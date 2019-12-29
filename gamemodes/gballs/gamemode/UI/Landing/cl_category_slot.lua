@@ -53,10 +53,9 @@ function CATEGORYSLOT:Draw()
             self:GetParent().currentColor =  self:GetParent().mainColor
         end
     end
-    local gameType = self.gameType
     self.button.DoClick = function()
         net.Start("SetGame")
-        net.WriteInt(gameType, 16)
+        net.WriteInt(self.gameType, 16)
         net.SendToServer()
     end
 end

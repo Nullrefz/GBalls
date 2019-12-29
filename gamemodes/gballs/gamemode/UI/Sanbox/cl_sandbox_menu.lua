@@ -41,9 +41,20 @@ function SANDBOXMENU:Init()
     self.categoryListIndicator:Dock(LEFT)
     self.categoryListIndicator:SetColor(gb.blackNotch0)
     self.categoryListIndicator:SetWide(2)
+    self.inspector = vgui.Create("gb_inspector", self)
+    self.inspector:Dock(RIGHT)
+    self.inspector:SetWide(toHRatio(300))
     self.tools = vgui.Create("gb_sandboxtools", self)
     self.tools:Dock(TOP)
-    self.tools:SetTall(toVRatio(64))
+    self.tools:SetTall(toVRatio(62))
+    self.grid = vgui.Create("gb_panelgrid", self)
+    self.grid:Dock(FILL)
+    self.grid:SetItemSize(72)
+    self.grid:SetSpacing(2)
+
+    for i = 0, 20 do
+        self.grid:Add(vgui.Create("gb_itemslot"), "SandboxSlots")
+    end
 end
 
 vgui.Register("gb_sandboxmenu", SANDBOXMENU)
