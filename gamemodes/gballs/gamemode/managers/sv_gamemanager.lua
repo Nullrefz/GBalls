@@ -1,11 +1,11 @@
-GameState = {
-    SANDBOX = 1,
-    RACE = 2,
-    ARENA = 3,
+GB.GameState = {
+    RACE = 1,
+    ARENA = 2,
+    SANDBOX = 3,
     MENU = 4
 }
 
-currentGame = GameState.MENU
+currentGame = GB.GameState.MENU
 util.AddNetworkString("SetGame")
 util.AddNetworkString("OnGameSet")
 
@@ -14,6 +14,7 @@ function GB:SetGame(gameType)
     net.Start("OnGameSet")
     net.WriteInt(currentGame, 16)
     net.Broadcast()
+    hook.Run("OnGameSet", gameType)
 end
 
 net.Receive("SetGame", function(len, ply)
