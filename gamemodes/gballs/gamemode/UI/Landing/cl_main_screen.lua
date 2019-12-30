@@ -1,5 +1,9 @@
 MAINSCREEN = {}
 
+local mats = {
+    EXIT = Material("gballs/icons/exit.png", "smooth")
+}
+
 function MAINSCREEN:Init()
     net.Receive("OnGameSet", function()
         self.headerBody:Clear()
@@ -42,18 +46,25 @@ end
 
 function MAINSCREEN:SetMainMenu()
     self.headerIndicator:SetColor(gb.menuColor)
-    self.exitButton = vgui.Create("DButton", self.headerBody)
-    self.exitButton:SetText("Exit")
+    self.exitButton = vgui.Create("gb_iconbutton", self.headerBody)
+    self.exitButton:SetMat(mats.EXIT)
+    self.exitButton:SetColors(Color(255, 50, 50), Color(255, 255, 255))
     self.exitButton:Dock(RIGHT)
+
+    function self.PerformLayout(width, height)
+        self.exitButton:SetWide(self.exitButton:GetTall())
+    end
+
     self.exitButton:DockMargin(10, 10, 10, 10)
 
-    self.exitButton.DoClick = function()
+    self.exitButton:SetAction(function()
         RunConsoleCommand("disconnect")
-    end
+    end)
 
     self.categoryList = vgui.Create("gb_panellist", self.body)
     self.categoryList:Dock(FILL)
     self.categoryList:SetSpacing(toHRatio(64))
+
     for i = 1, 3 do
         local category = vgui.Create("gb_categoryslot")
         category:SetSize(toHRatio(420), toHRatio(420))

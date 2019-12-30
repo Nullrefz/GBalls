@@ -1,11 +1,11 @@
 CATEGORYSLOT = {}
 local mats = {Material("gballs/icons/race.png", "smooth"), Material("gballs/icons/arena.png", "smooth"), Material("gballs/icons/sandbox.png", "smooth")}
 local gameTpye = {"Race", "Arena", "Sanbox"}
-
+local selectionColors = {Color(255, 75, 75, 255), Color(50, 200, 100, 255), Color(0, 150, 255, 255)}
 function CATEGORYSLOT:Init()
     self.gameType = 1
     self.mainColor = Color(54, 54, 54, 255)
-    self.selectedColor = Color(0, 150, 255, 255)
+    self.selectedColor = selectionColors[self.gameType]
     self.currentColor = self.mainColor
 end
 
@@ -43,16 +43,29 @@ function CATEGORYSLOT:Draw()
     end
 
     self.button = vgui.Create("DButton", self)
-    self.button:Dock(FILL)
     self.button:SetText("")
-    function self.button:Paint() end
+
+    function self.button:Paint()
+    end
+
+    self.button.hovered = false
+
     function self.button:Think()
-        if self:IsHovered() then
-            self:GetParent().currentColor =  self:GetParent().selectedColor
-        else
-            self:GetParent().currentColor =  self:GetParent().mainColor
+        if self:IsHovered() and not self.hovered then
+            self.hovered = true
+
+            LerpColor(self:GetParent().currentColor, self:GetParent().selectedColor, 0.1, function(col)
+                self:GetParent().currentColor = col
+            end, INTERPOLATION.SmoothStep)
+        elseif not self:IsHovered() and self.hovered then
+            self.hovered = false
+
+            LerpColor(self:GetParent().currentColor, self:GetParent().mainColor, 0.1, function(col)
+                self:GetParent().currentColor = col
+            end, INTERPOLATION.SmoothStep)
         end
     end
+
     self.button.DoClick = function()
         net.Start("SetGame")
         net.WriteInt(self.gameType, 16)
@@ -62,7 +75,12 @@ end
 
 function CATEGORYSLOT:SetGameType(type)
     self.gameType = type
+    self.selectedColor = selectionColors[self.gameType]
     self:Draw()
+end
+
+function CATEGORYSLOT:PerformLayout(width, height)
+    self.button:SetSize(width, height)
 end
 
 vgui.Register("gb_categoryslot", CATEGORYSLOT)
