@@ -1,3 +1,4 @@
+GB.sandboxCamera = {}
 CreateConVar("gb_sandboxcamera_distance", 64, FCVAR_USERINFO)
 CreateConVar("gb_sandboxcamera_z", 45, FCVAR_USERINFO)
 CreateConVar("gb_sandboxangle", 0, FCVAR_USERINFO)
@@ -8,7 +9,7 @@ local cameraZ = 0
 local target = Vector(0, 0, 0)
 local view = {}
 
-function GB:CalcEditModeView(ply, pos, angles, fov)
+function GB.sandboxCamera:CalcEditModeView(ply, pos, angles, fov)
     if not IsValid(view.target) then
         view.target = lastPos or Vector(0, 0, 0)
     end
@@ -27,15 +28,16 @@ function GB:CalcEditModeView(ply, pos, angles, fov)
     return view
 end
 
-function GB:SetTarget(tr)
-    target = tr
+function GB.sandboxCamera:SetTarget(tr)
+    target = tr:GetPos()
 end
 
-hook.Add("CalcView", "EditModeView", function(ply, pos, angles, fov) return GB:CalcEditModeView(ply, pos, angles, fov) end)
-
--- control the camera
-function GB:SandboxCameraControls(ply, mv, cmd)
+function GB.sandboxCamera:GetHoveredEntity()
+    if not view.angles then return end
+   return util.QuickTrace(view.origin, (view.angles:Forward() + 500 * gui.ScreenToVector(gui.MousePos())) * 1000, LocalPlayer()).Entity
 end
+
+hook.Add("CalcView", "EditModeView", function(ply, pos, angles, fov) return GB.sandboxCamera:CalcEditModeView(ply, pos, angles, fov) end)
 
 local middlePressed = false
 local initalPos = Vector(0, 0, 0)
@@ -69,44 +71,4 @@ hook.Add("CreateMove", "SandboxCameraControls", function(cmd)
     elseif input.WasMousePressed(MOUSE_WHEEL_DOWN) then
         camera:SetInt(math.Clamp(camera:GetInt() + 40, 64, 600))
     end
-
-    if (cmd:KeyDown(IN_RELOAD)) then
-        camera:SetInt(300)
-        zPos:SetInt(90)
-        angle:SetInt(0)
-    end
-
-    if (cmd:KeyDown(IN_DUCK) and cmd:GetMouseX() ~= 0) then
-        if angle:GetInt() > 359 then
-            angle:SetInt(0)
-        end
-
-        angle:SetInt(angle:GetInt() + cmd:GetMouseX() / 20)
-    end
 end)
-
-hook.Add("PreDrawHalos", "AddPropHalos", function()
-    local tr = util.QuickTrace(view.origin, (view.angles:Forward() + 500 * gui.ScreenToVector(gui.MousePos())) * 1000, LocalPlayer())
-
-    if (IsValid(tr.Entity)) then
-        halo.Add({tr.Entity}, Color(0, 255, 0), 0, 0, 20)
-        GB:SetTarget(tr.Entity:GetPos())
-    end
-end)
--- if (gui.InternalMousePressed(MOUSE_MIDDLE)) then
---     -- print(gui.MouseX() .. " " .. gui.MouseY())
---     --zPos:SetInt(math.Clamp(zPos:GetInt() + (cmd:GetMouseWheel() * 10), 0, 90))
--- else
---     --camera:SetInt(math.Clamp(camera:GetInt() - (cmd:GetMouseWheel() * 10), 64, 600))
--- end
--- if (cmd:KeyDown(IN_RELOAD)) then
---     camera:SetInt(300)
---     zPos:SetInt(90)
---     angle:SetInt(0)
--- end
--- if (cmd:KeyDown(IN_DUCK) and cmd:GetMouseX() ~= 0) then
---     if angle:GetInt() > 359 then
---         angle:SetInt(0)
---     end
---     angle:SetInt(angle:GetInt() + cmd:GetMouseX() / 20)
--- end
