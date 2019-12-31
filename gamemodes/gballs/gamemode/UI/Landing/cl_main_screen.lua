@@ -2,7 +2,8 @@ MAINSCREEN = {}
 
 local mats = {
     Exit = Material("gballs/icons/exit.png", "smooth"),
-    Back = Material("gballs/icons/back.png", "smooth")
+    Back = Material("gballs/icons/back.png", "smooth"),
+    Circle = Material("gballs/icons/circle.png", "smooth")
 }
 
 function MAINSCREEN:Init()
@@ -82,33 +83,33 @@ end
 
 function MAINSCREEN:SetSandbox()
     self.headerIndicator:SetColor(gb.sandboxColor)
-    self.createButton = vgui.Create("DButton", self.headerBody)
-    self.createButton:SetText("New")
+    self.createButton = vgui.Create("gb_iconbutton", self.headerBody)
+    self.createButton:SetMat(mats.Circle)
 
-    self.createButton.DoClick = function()
+    self.createButton:SetAction(function()
         self:Remove()
         GB.sandboxMenu:Show()
-    end
+    end)
 
     self.createButton:Dock(LEFT)
     self.createButton:DockMargin(10, 10, 10, 10)
-    self.loadButton = vgui.Create("DButton", self.headerBody)
-    self.loadButton:SetText("Load")
+    self.loadButton = vgui.Create("gb_iconbutton", self.headerBody)
+    self.loadButton:SetMat(mats.Circle)
 
-    self.loadButton.DoClick = function()
+    self.loadButton:SetAction(function()
         self:Remove()
         GB.sandboxMenu:Show()
-    end
+    end)
 
     self.loadButton:Dock(LEFT)
     self.loadButton:DockMargin(10, 10, 10, 10)
-    self.saveButton = vgui.Create("DButton", self.headerBody)
-    self.saveButton:SetText("Save")
+    self.saveButton = vgui.Create("gb_iconbutton", self.headerBody)
+    self.saveButton:SetMat(mats.Circle)
 
-    self.saveButton.DoClick = function()
+    self.saveButton:SetAction(function()
         self:Remove()
         GB.sandboxMenu:Show()
-    end
+    end)
 
     self.saveButton:Dock(LEFT)
     self.saveButton:DockMargin(10, 10, 10, 10)
@@ -125,13 +126,13 @@ function MAINSCREEN:SetSandbox()
 
     self.backButton:Dock(RIGHT)
     self.backButton:DockMargin(10, 10, 10, 10)
-    self.editMode = vgui.Create("DButton", self.headerBody)
-    self.editMode:SetText("Edit")
+    self.editMode = vgui.Create("gb_iconbutton", self.headerBody)
+    self.editMode:SetMat(mats.Circle)
 
-    self.editMode.DoClick = function()
+    self.editMode:SetAction(function()
         self:Remove()
         GB.sandboxMenu:Show()
-    end
+    end)
 
     self.editMode:Dock(RIGHT)
     self.editMode:DockMargin(10, 10, 10, 10)

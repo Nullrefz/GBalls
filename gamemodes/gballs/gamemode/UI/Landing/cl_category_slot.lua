@@ -2,6 +2,7 @@ CATEGORYSLOT = {}
 local mats = {Material("gballs/icons/race.png", "smooth"), Material("gballs/icons/arena.png", "smooth"), Material("gballs/icons/sandbox.png", "smooth")}
 local gameTpye = {"Race", "Arena", "Sanbox"}
 local selectionColors = {Color(255, 75, 75, 255), Color(50, 200, 100, 255), Color(0, 150, 255, 255)}
+
 function CATEGORYSLOT:Init()
     self.gameType = 1
     self.mainColor = Color(54, 54, 54, 255)
