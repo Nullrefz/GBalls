@@ -55,6 +55,7 @@ function CATEGORYSLOT:Draw()
             self.hovered = true
 
             LerpColor(self:GetParent().currentColor, self:GetParent().selectedColor, 0.1, function(col)
+                if not IsValid(self) then return end
                 self:GetParent().currentColor = col
             end, INTERPOLATION.SmoothStep)
         elseif not self:IsHovered() and self.hovered then

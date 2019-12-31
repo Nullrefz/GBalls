@@ -12,19 +12,20 @@ function ICONBUTTON:Init()
     self.panel.unSelectedColor = Color(255, 255, 255)
     self.panel.color = self.panel.unSelectedColor
     self.panel.hovered = false
-    self.panel.isToggle = false
 
     function self.panel:Think()
         if self:IsHovered() and not self.hovered then
             self.hovered = true
 
             LerpColor(self.color, self.selectedColor, 0.1, function(col)
+                if not IsValid(self) then return end
                 self.color = col
             end, INTERPOLATION.SmoothStep)
         elseif not self:IsHovered() and self.hovered then
             self.hovered = false
 
             LerpColor(self.color, self.unSelectedColor, 0.1, function(col)
+                if not IsValid(self) then return end
                 self.color = col
             end, INTERPOLATION.SmoothStep)
         end
@@ -60,13 +61,19 @@ function ICONBUTTON:SetKey(key)
         if key == 0 then return end
 
         if input.WasKeyPressed(key) then
+            if not IsValid(self) then return end
+
             LerpColor(self.panel.color, self.panel.selectedColor, 0.1, function(col)
+                if not IsValid(self) then return end
                 self.panel.color = col
             end, INTERPOLATION.SmoothStep)
         end
 
         if input.WasKeyReleased(key) then
+            if not IsValid(self) then return end
+
             LerpColor(self.panel.color, self.panel.unSelectedColor, 0.1, function(col)
+                if not IsValid(self) then return end
                 self.panel.color = col
             end, INTERPOLATION.SmoothStep)
 

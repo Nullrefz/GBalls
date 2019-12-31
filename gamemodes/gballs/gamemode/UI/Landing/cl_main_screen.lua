@@ -1,7 +1,8 @@
 MAINSCREEN = {}
 
 local mats = {
-    EXIT = Material("gballs/icons/exit.png", "smooth")
+    Exit = Material("gballs/icons/exit.png", "smooth"),
+    Back = Material("gballs/icons/back.png", "smooth")
 }
 
 function MAINSCREEN:Init()
@@ -47,7 +48,7 @@ end
 function MAINSCREEN:SetMainMenu()
     self.headerIndicator:SetColor(gb.menuColor)
     self.exitButton = vgui.Create("gb_iconbutton", self.headerBody)
-    self.exitButton:SetMat(mats.EXIT)
+    self.exitButton:SetMat(mats.Exit)
     self.exitButton:SetColors(Color(255, 50, 50), Color(255, 255, 255))
     self.exitButton:Dock(RIGHT)
 
@@ -111,14 +112,16 @@ function MAINSCREEN:SetSandbox()
 
     self.saveButton:Dock(LEFT)
     self.saveButton:DockMargin(10, 10, 10, 10)
-    self.backButton = vgui.Create("DButton", self.headerBody)
-    self.backButton:SetText("Back")
+    self.backButton = vgui.Create("gb_iconbutton", self.headerBody)
+    self.backButton:SetMat(mats.Back)
+    self.backButton:SetKey(KEY_ESCAPE)
+    self.backButton:SetColors(gb.red, gb.white)
 
-    self.backButton.DoClick = function()
+    self.backButton:SetAction(function()
         net.Start("SetGame")
         net.WriteInt(4, 16)
         net.SendToServer()
-    end
+    end)
 
     self.backButton:Dock(RIGHT)
     self.backButton:DockMargin(10, 10, 10, 10)

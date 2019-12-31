@@ -7,7 +7,8 @@ local mats = {
     Rotate = Material("gballs/icons/rotate.png", "smooth"),
     Scale = Material("gballs/icons/scale.png", "smooth"),
     Color = Material("gballs/icons/color.png", "smooth"),
-    Delete = Material("gballs/icons/delete.png", "smooth")
+    Delete = Material("gballs/icons/delete.png", "smooth"),
+    Focus = Material("gballs/icons/focus.png", "smooth")
 }
 
 function GBSANDBOXTOOLS:Init()
@@ -17,6 +18,7 @@ function GBSANDBOXTOOLS:Init()
 
     self.container = vgui.Create("gb_panellist", self)
     self.container:SetSpacing(toHRatio(16))
+    self.container:Add(self:MakeFocusButton())
     self.container:Add(self:MakeUndoButton())
     self.container:Add(self:MakeRedoButton())
     self.container:Add(self:MakePlaceButton())
@@ -32,6 +34,15 @@ end
 
 function GBSANDBOXTOOLS:PerformLayout(width, height)
     self.container:Dock(FILL)
+end
+
+function GBSANDBOXTOOLS:MakeFocusButton()
+    local focusButton = vgui.Create("gb_iconbutton")
+    focusButton:SetMat(mats.Focus)
+    focusButton:SetColors(gb.green, gb.white)
+    focusButton:SetKey(KEY_F)
+
+    return focusButton
 end
 
 function GBSANDBOXTOOLS:MakeUndoButton()
@@ -53,7 +64,7 @@ function GBSANDBOXTOOLS:MakeRedoButton()
 end
 
 function GBSANDBOXTOOLS:MakePlaceButton()
-    local placeButton = vgui.Create("gb_iconbutton")
+    local placeButton = vgui.Create("gb_icontoggle")
     placeButton:SetMat(mats.Move)
     placeButton:SetColors(gb.redwhite, gb.white)
     placeButton:SetKey(KEY_W)
@@ -62,7 +73,7 @@ function GBSANDBOXTOOLS:MakePlaceButton()
 end
 
 function GBSANDBOXTOOLS:MakeRotateButton()
-    local rotateButton = vgui.Create("gb_iconbutton")
+    local rotateButton = vgui.Create("gb_icontoggle")
     rotateButton:SetMat(mats.Rotate)
     rotateButton:SetColors(gb.blue, gb.white)
     rotateButton:SetKey(KEY_E)
@@ -71,7 +82,7 @@ function GBSANDBOXTOOLS:MakeRotateButton()
 end
 
 function GBSANDBOXTOOLS:MakeScaleButton()
-    local scaleButton = vgui.Create("gb_iconbutton")
+    local scaleButton = vgui.Create("gb_icontoggle")
     scaleButton:SetMat(mats.Scale)
     scaleButton:SetColors(gb.yellow, gb.white)
     scaleButton:SetKey(KEY_R)
@@ -80,7 +91,7 @@ function GBSANDBOXTOOLS:MakeScaleButton()
 end
 
 function GBSANDBOXTOOLS:MakeDeleteButton()
-    local deleteButton = vgui.Create("gb_iconbutton")
+    local deleteButton = vgui.Create("gb_icontoggle")
     deleteButton:SetMat(mats.Delete)
     deleteButton:SetColors(gb.red, gb.white)
     deleteButton:SetKey(KEY_DELETE)
@@ -89,7 +100,7 @@ function GBSANDBOXTOOLS:MakeDeleteButton()
 end
 
 function GBSANDBOXTOOLS:MakeColorButton()
-    local colorButton = vgui.Create("gb_iconbutton")
+    local colorButton = vgui.Create("gb_icontoggle")
     colorButton:SetMat(mats.Color)
     colorButton:SetColors(gb.purple, gb.white)
     colorButton:SetKey(KEY_C)
