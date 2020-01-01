@@ -60,6 +60,7 @@ end
 function ICONBUTTON:SetKey(key)
     hook.Add("CreateMove", "PressControls" .. self.rand, function()
         if key == 0 then return end
+        if not IsValid(self) then return end
 
         if input.WasKeyPressed(key) then
             if not IsValid(self) then return end
@@ -82,7 +83,6 @@ function ICONBUTTON:SetKey(key)
                 self.panel:DoClick()
             end
         end
-
         if input.WasMousePressed(MOUSE_LEFT) then
             self.panel.clicked = true
         elseif input.WasMouseReleased(MOUSE_LEFT) then

@@ -60,7 +60,7 @@ function MAINSCREEN:SetMainMenu()
     self.exitButton:DockMargin(10, 10, 10, 10)
 
     self.exitButton:SetAction(function()
-        RunConsoleCommand("disconnect")
+        RunConsoleCommand("reload")
     end)
 
     self.categoryList = vgui.Create("gb_panellist", self.body)

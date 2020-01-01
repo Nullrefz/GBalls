@@ -70,7 +70,7 @@ end
 function ICONTOGGLE:SetKey(key)
     hook.Add("CreateMove", "PressControls" .. self.rand, function()
         if key == 0 then return end
-
+        if not IsValid(self) then return end
         if input.WasKeyPressed(key) then
             self.panel.pressed = true
         end
