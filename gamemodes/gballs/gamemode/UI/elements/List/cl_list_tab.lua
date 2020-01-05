@@ -4,6 +4,7 @@ function LISTTAB:Init()
     self.currentColor = gb.tabDiselected
     self.indicatorColor = gb.tabInactive
     self.randomNumber = math.random(1, 9999)
+    self.active = false
 
     hook.Add("TabSelected", "DisableTab" .. self.randomNumber, function(name)
         if not IsValid(self) then return end
@@ -52,13 +53,27 @@ function LISTTAB:SetCategory(category)
 end
 
 function LISTTAB:SetActive()
+    if self.active then return end
+    self.active = true
     self.indicatorColor = gb.tabActive
     self.indicator:SetColor(self.indicatorColor)
+
+    if self.bind then
+        self.boundPanel:Clear()
+        self.bind()
+    end
 end
 
 function LISTTAB:SetInactive()
+    if not self.active then return end
+    self.active = false
     self.indicatorColor = gb.tabInactive
     self.indicator:SetColor(self.indicatorColor)
+end
+
+function LISTTAB:SetBinding(panel, instructions)
+    self.boundPanel = panel
+    self.bind = instructions
 end
 
 vgui.Register("gb_listtab", LISTTAB)

@@ -1,12 +1,5 @@
 SANDBOXMENU = {}
 
-local Categories = {
-    Spawn = 1,
-    BasicSquare = 2,
-    BasicCircle = 3,
-    Goal = 4
-}
-
 function SANDBOXMENU:Init()
     function self:Paint(width, height)
         draw.DrawRect(0, 0, width, height, gb.blackNotch2)
@@ -15,6 +8,10 @@ function SANDBOXMENU:Init()
     self.headerIndicator = vgui.Create("gb_indicator", self)
     self.headerIndicator:Dock(TOP)
     self.headerIndicator:SetColor(gb.sandboxColor)
+    self.grid = vgui.Create("Panel", self)
+    self.grid:Dock(FILL)
+
+
     self.categoryList = vgui.Create("gb_panellist", self)
     self.categoryList:Dock(LEFT)
     self.categoryList:SetSpacing(2)
@@ -26,8 +23,17 @@ function SANDBOXMENU:Init()
         draw.DrawRect(0, 0, width, height, gb.blackNotch1)
     end
 
-    for k, v in pairs(Categories) do
+    for k, v in pairs(GB.platformType) do
         local tab = vgui.Create("gb_listtab", nil, "sandboxCatergory")
+        tab:SetBinding(self.grid, function()
+            local grid = vgui.Create("gb_panelgrid", self.grid)
+            grid:Dock(FILL)
+            grid:SetItemSize(72)
+            grid:SetSpacing(2)
+            for i = 0, #GB.platforms[v] do
+                grid:Add(vgui.Create("gb_itemslot"), "SandboxSlots")
+            end
+        end)
 
         if v == 3 then
             tab:SetActive()
@@ -47,14 +53,6 @@ function SANDBOXMENU:Init()
     self.tools = vgui.Create("gb_sandboxtools", self)
     self.tools:Dock(TOP)
     self.tools:SetTall(toVRatio(62))
-    self.grid = vgui.Create("gb_panelgrid", self)
-    self.grid:Dock(FILL)
-    self.grid:SetItemSize(72)
-    self.grid:SetSpacing(2)
-
-    for i = 0, 20 do
-        self.grid:Add(vgui.Create("gb_itemslot"), "SandboxSlots")
-    end
 end
 
 vgui.Register("gb_sandboxmenu", SANDBOXMENU)

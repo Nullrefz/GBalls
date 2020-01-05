@@ -55,11 +55,19 @@ end
 function ITEMSLOT:SetActive()
     self.indicatorColor = gb.tabActive
     self.selected = true
+
+    if self.bind then
+        self.binding()
+    end
 end
 
 function ITEMSLOT:SetInactive()
     self.indicatorColor = gb.tabInactive
     self.selected = false
+end
+
+function ITEMSLOT:SetBinding(instructions)
+    self.bind = instructions
 end
 
 vgui.Register("gb_itemslot", ITEMSLOT)
