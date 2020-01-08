@@ -1,0 +1,17 @@
+"VertexLitGeneric"
+{
+// File Created by Wall Worm Pro ( http://dev.wallworm.com )
+
+// BEGIN Textures
+	$basetexture "Grid/grid"
+// END Textures
+
+
+
+// BEGIN Transparency
+	"$alphatest" 1
+	"$AlphaTestReference" "0.5"
+// END Transparency
+
+
+}

@@ -1,0 +1,11 @@
+"VertexLitGeneric"
+{
+// File Created by Wall Worm Pro ( http://dev.wallworm.com )
+
+// BEGIN Textures
+	$basetexture "gballs/grid"
+// END Textures
+
+
+
+}
