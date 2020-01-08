@@ -1,19 +1,20 @@
 function GB:InitSanbox()
+    self:InitGrid()
     local spawn = ents.Create("gb_platform_square_1x1")
     if not IsValid(spawn) then return end
     spawn:Spawn()
-    spawn:SetPos(Vector(0, 0, 0))
+    self:PlaceEntity(spawn, Vector(0, 0, 0), true)
+end
 
-    local grid = ents.Create("gb_grid")
-    if not IsValid(grid) then return end
-    grid:Spawn()
-    LerpFloat(500, 0, 1, function(pos)
-        grid:SetPos(Vector(0, 0, pos))
-    end, INTERPOLATION.SinLerp)
+function GB:ClearSandbox()
+    self:ClearGrid()
+    self:ClearProps()
 end
 
 hook.Add("OnGameSet", "SetSandbox", function(gameType)
     if gameType == GB.GameState.SANDBOX then
         GB:InitSanbox()
+    else
+        GB:ClearSandbox()
     end
 end)

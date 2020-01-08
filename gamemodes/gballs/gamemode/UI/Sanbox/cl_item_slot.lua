@@ -64,7 +64,7 @@ function ITEMSLOT:SetActive()
     self.selected = true
 
     if self.bind then
-        self.binding()
+        self.bind()
     end
 end
 

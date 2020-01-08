@@ -33,6 +33,13 @@ function SANDBOXMENU:Init()
             for i = 1, #GB.platforms[v] do
                 local slot = vgui.Create("gb_itemslot")
                 slot:SetEntity(GB.platforms[v][i])
+
+                slot:SetBinding(function()
+                    net.Start("OnPropSelected")
+                    net.WriteString(GB.platforms[v][i])
+                    net.SendToServer()
+                end)
+
                 grid:Add(slot, "SandboxSlots")
             end
         end)
