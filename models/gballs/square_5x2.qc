@@ -4,14 +4,14 @@
 // http://dev.wallworm.com 
 
 $scale 1.0
-$modelname	"gballs/square_4x4.mdl"
-$origin 1088 64 0 0 
-$body square_4x4 "square_4x4.smd"
-$collisionmodel "square_4x4.smd" {
+$modelname	"gballs/square_5x2.mdl"
+$origin 1408 96 0 0 
+$body square_5x2 "square_5x2.smd"
+$collisionmodel "square_5x2.smd" {
 
 }
 $contents "solid"
 $cdmaterials "gballs"
-$sequence idle "square_4x4.smd"  activity ACT_IDLE -1 loop fps 30
+$sequence idle "square_5x2.smd"  activity ACT_IDLE -1 loop fps 30
 
-$include	"square_4x4_wwmt_custom.qci"
+$include	"square_5x2_wwmt_custom.qci"

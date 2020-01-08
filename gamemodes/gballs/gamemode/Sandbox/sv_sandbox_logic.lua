@@ -1,7 +1,6 @@
 function GB:InitSanbox()
-    local spawn = ents.Create("prop_dynamic")
+    local spawn = ents.Create("gb_platform_square_1x1")
     if not IsValid(spawn) then return end
-    spawn:SetModel("models/gballs/square_4x4.mdl")
     spawn:Spawn()
     spawn:SetPos(Vector(0, 0, 0))
 

@@ -47,6 +47,13 @@ end
 
 function ITEMSLOT:PerformLayout(width, height)
     self.button:SetSize(width, height)
+
+    if self.modelPanel then
+        self.modelPanel:SetSize(width - self.border, height - self.border)
+        self.modelPanel:SetPos(self.border / 2, self.border / 2)
+    end
+
+    self.button:MoveToFront()
 end
 
 function ITEMSLOT:SetContent(content)
@@ -68,6 +75,18 @@ end
 
 function ITEMSLOT:SetBinding(instructions)
     self.bind = instructions
+end
+
+function ITEMSLOT:SetEntity(class)
+    if not class or class == "" then return end
+    self.modelPanel = vgui.Create("DModelPanel", self)
+    local ent = ents.CreateClientside(class)
+    if not IsValid(ent) then return end
+    self.modelPanel:SetModel(ent.Model)
+    self.modelPanel:SetLookAt(Vector(0, 0, 0))
+    function self.modelPanel:LayoutEntity( Entity ) return end -- disables default rotation
+    self.modelPanel:SetCamPos(Vector(0,0, -self.modelPanel:GetEntity():GetModelBounds().x * 2))
+    ent:Remove()
 end
 
 vgui.Register("gb_itemslot", ITEMSLOT)

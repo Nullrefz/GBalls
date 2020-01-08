@@ -10,8 +10,6 @@ function SANDBOXMENU:Init()
     self.headerIndicator:SetColor(gb.sandboxColor)
     self.grid = vgui.Create("Panel", self)
     self.grid:Dock(FILL)
-
-
     self.categoryList = vgui.Create("gb_panellist", self)
     self.categoryList:Dock(LEFT)
     self.categoryList:SetSpacing(2)
@@ -25,13 +23,17 @@ function SANDBOXMENU:Init()
 
     for k, v in pairs(GB.platformType) do
         local tab = vgui.Create("gb_listtab", nil, "sandboxCatergory")
+
         tab:SetBinding(self.grid, function()
             local grid = vgui.Create("gb_panelgrid", self.grid)
             grid:Dock(FILL)
             grid:SetItemSize(72)
             grid:SetSpacing(2)
-            for i = 0, #GB.platforms[v] do
-                grid:Add(vgui.Create("gb_itemslot"), "SandboxSlots")
+
+            for i = 1, #GB.platforms[v] do
+                local slot = vgui.Create("gb_itemslot")
+                slot:SetEntity(GB.platforms[v][i])
+                grid:Add(slot, "SandboxSlots")
             end
         end)
 

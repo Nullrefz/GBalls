@@ -34,11 +34,11 @@ end
 
 function GB.sandboxCamera:GetHoveredEntity()
     if not view.angles then return end
-   return util.QuickTrace(view.origin, (view.angles:Forward() + 500 * gui.ScreenToVector(gui.MousePos())) * 1000, LocalPlayer()).Entity
+
+    return util.QuickTrace(view.origin, (view.angles:Forward() + 500 * gui.ScreenToVector(gui.MousePos())) * 1000, LocalPlayer()).Entity
 end
 
 hook.Add("CalcView", "EditModeView", function(ply, pos, angles, fov) return GB.sandboxCamera:CalcEditModeView(ply, pos, angles, fov) end)
-
 local middlePressed = false
 local initalPos = Vector(0, 0, 0)
 local lastTargetPos = Vector(0, 0, 0)
@@ -72,3 +72,9 @@ hook.Add("CreateMove", "SandboxCameraControls", function(cmd)
         camera:SetInt(math.Clamp(camera:GetInt() + 40, 64, 600))
     end
 end)
+
+function GB:GetTopView(position)
+    local topView = 0
+
+    return topView
+end
