@@ -69,6 +69,16 @@ function GBSANDBOXTOOLS:MakePlaceButton()
     placeButton:SetColors(gb.redwhite, gb.white)
     placeButton:SetKey(KEY_W)
 
+    placeButton:SetActions(function()
+        net.Start("OnMoveToggled")
+        net.WriteBool(true)
+        net.SendToServer()
+    end, function()
+        net.Start("OnMoveToggled")
+        net.WriteBool(false)
+        net.SendToServer()
+    end)
+
     return placeButton
 end
 

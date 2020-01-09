@@ -6,7 +6,7 @@ nodes
 end
 skeleton
 time 0
-0 512 64 0 0 0 0
+0 480 192 0 0 0 0
 end
 triangles
 gballs_blue

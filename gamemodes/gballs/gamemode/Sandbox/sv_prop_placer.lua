@@ -1,6 +1,7 @@
 GB.placedProps = {}
 GB.heldProp = nil
 util.AddNetworkString("OnPropSelected")
+util.AddNetworkString("OnMoveToggled")
 
 function GB:PlaceEntity(ent, pos, isHeld)
     ent:SetPos(pos)
@@ -27,7 +28,30 @@ end
 function GB:MoveProp()
 end
 
-function GB:DrawGizmo()
+function GB:DrawGizmo(show)
+    if not self.heldProp then return end
+    local min, max = self.heldProp:GetModelBounds()
+    local midPoint = (max - min) / 2
+
+    if self.arrows then
+        for k, v in pairs(self.arrows) do
+            if IsValid(v) then
+                v:Remove()
+            end
+        end
+    end
+
+    if not show then return end
+    self.arrows = {}
+
+    for i = 0, 3 do
+        local arrow = ents.Create("prop_dynamic")
+        arrow:SetModel("models/gballs/arrow.mdl")
+        arrow:Spawn()
+        arrow:SetAngles(Angle(0, i * 90, 0))
+        arrow:SetPos(Vector(midPoint.x, midPoint.y, 0) + arrow:GetAngles():Forward() * midPoint * 1.1)
+        table.insert(self.arrows, arrow)
+    end
 end
 
 function GB:ClearProps()
@@ -48,4 +72,8 @@ end
 
 net.Receive("OnPropSelected", function()
     GB:CreateProp(net.ReadString())
+end)
+
+net.Receive("OnMoveToggled", function()
+    GB:DrawGizmo(net.ReadBool())
 end)

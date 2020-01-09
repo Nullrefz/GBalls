@@ -5,7 +5,7 @@
 
 $scale 1.0
 $modelname	"gballs/square_2x1.mdl"
-$origin -224 0 0 0 
+$origin -256 64 0 0 
 $body square_2x1 "square_2x1.smd"
 $collisionmodel "square_2x1.smd" {
 
