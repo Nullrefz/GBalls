@@ -14,7 +14,8 @@ function GB:CreateTile(sizeX, sizeY)
             local tile = ents.CreateClientProp()
             tile:SetModel("models/gballs/gridtile.mdl")
             tile:Spawn()
-            tile:SetColor(0,255,0, 255)
+            tile:SetColor(Color(0, 255, 0, 230))
+            tile:SetRenderMode(RENDERMODE_TRANSALPHA)
             table.insert(self.tiles, tile)
         end
     end
@@ -26,13 +27,18 @@ function GB:CreateTile(sizeX, sizeY)
     end)
 end
 
+local lastTile = Vector(0, 0, 0)
+
 function GB:SetTilePos(tiles, sizeX, sizeY)
+    local tracePos = self.sandboxCamera:GetMouseTrace(5000).HitPos
+    local mousePos = self:GetTile(tracePos)
+    if mousePos == lastTile then return end
+    mousePos = lastTile
     local index = 1
 
     for i = 1, sizeY do
         for j = 1, sizeX do
-            print(index)
-            tiles[index]:SetPos(self.sandboxCamera:GetMouseTrace(5000).HitPos + Vector(self.tileSize * (j - 1), self.tileSize * (i - 1), 0))
+            tiles[index]:SetPos(tracePos + Vector(self.tileSize * (j - 1), self.tileSize * (i - 1), 0))
             local tile = self:GetTile(tiles[index])
             self:SetTile(tiles[index], tile)
             tiles[index]:SetPos(tiles[index]:GetPos() + Vector(self.tileSize, self.tileSize, 0) / 2)
@@ -42,5 +48,5 @@ function GB:SetTilePos(tiles, sizeX, sizeY)
 end
 
 net.Receive("CreateTile", function()
-    GB:CreateTile(5, 5)
+    GB:CreateTile(2, 3)
 end)

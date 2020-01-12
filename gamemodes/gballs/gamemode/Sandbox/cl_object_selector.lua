@@ -22,9 +22,9 @@ hook.Add("CreateMove", "SelectObject", function(cmd)
         else
         end
     end
-    local ent = GB.sandboxCamera:GetHoveredEntity()
 
-    if not IsValid(ent) then return end
+    local ent = GB.sandboxCamera:GetHoveredEntity(ents.FindByClass("gb_grid"))
+    if not IsValid(ent) or ent:GetClass() == "gb_grid" then return end
     GB.highLightedObject = ent
 
     if input.WasMousePressed(MOUSE_LEFT) then
@@ -38,6 +38,4 @@ hook.Add("CreateMove", "SelectObject", function(cmd)
             net.SendToServer()
         end
     end
-
-
 end)

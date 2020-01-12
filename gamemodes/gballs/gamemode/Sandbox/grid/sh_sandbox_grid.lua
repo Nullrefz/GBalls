@@ -2,7 +2,7 @@ GB.tileSize = 64
 GB.GridSquareSize = 128
 
 function GB:GetTile(ent)
-    local pos = ent:GetPos()
+    local pos = IsValid(ent) and ent:GetPos() or ent
     local tile = Vector(math.floor(pos.x / self.tileSize), math.floor(pos.y / self.tileSize), 0, 0)
 
     return tile
