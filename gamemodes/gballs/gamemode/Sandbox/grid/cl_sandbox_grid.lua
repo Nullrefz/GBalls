@@ -1,12 +1,5 @@
 function GB:CreateTile(sizeX, sizeY)
-    if self.tiles and self.tiles ~= {} then
-        for k, v in pairs(self.tiles) do
-            if IsValid(v) then
-                v:Remove()
-            end
-        end
-    end
-
+    self:RemoveTiles()
     self.tiles = {}
 
     for i = 1, sizeY do
@@ -22,11 +15,30 @@ function GB:CreateTile(sizeX, sizeY)
 
     self:SetTilePos(self.tiles, sizeX, sizeY)
 
-    hook.Add("Think", "PlaceTile", function()
+    hook.Add("CreateMove", "PlaceTile", function()
         self:SetTilePos(self.tiles, sizeX, sizeY)
+        if input.WasMousePressed(MOUSE_LEFT) and self:ValidatePos() then
+            self:RemoveTiles()
+            hook.Remove("CreateMove", "PlaceTile")
+            hook.Run("ObjectPlaced")
+
+        end
     end)
 end
 
+function GB:ValidatePos()
+    return true
+end
+
+function GB:RemoveTiles()
+    if self.tiles and self.tiles ~= {} then
+        for k, v in pairs(self.tiles) do
+            if IsValid(v) then
+                v:Remove()
+            end
+        end
+    end
+end
 local lastTile = Vector(0, 0, 0)
 
 function GB:SetTilePos(tiles, sizeX, sizeY)
@@ -45,8 +57,12 @@ function GB:SetTilePos(tiles, sizeX, sizeY)
             index = index + 1
         end
     end
+    net.Start("ObjectMoved")
+    net.WriteVector(tiles[1]:GetPos())
+    net.SendToServer()
 end
 
 net.Receive("CreateTile", function()
-    GB:CreateTile(2, 3)
+    local size = net.ReadVector()
+    GB:CreateTile(size.x, size.y)
 end)

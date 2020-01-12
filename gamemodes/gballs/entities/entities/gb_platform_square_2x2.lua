@@ -3,6 +3,7 @@ ENT.Type = 'anim'
 ENT.Base = "gb_platform_square"
 ENT.Spawnable = true
 ENT.Model = Model('models/gballs/square_2x2.mdl')
+ENT.Size = Vector(2, 2, 0)
 DEFINE_BASECLASS("gb_platform_square")
 
 if SERVER then

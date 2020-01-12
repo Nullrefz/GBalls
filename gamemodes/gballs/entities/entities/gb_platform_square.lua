@@ -2,6 +2,7 @@ AddCSLuaFile()
 ENT.Type = 'anim'
 ENT.Spawnable = true
 ENT.Model = Model('models/gballs/square_1x1.mdl')
+ENT.Size = Vector(1, 1, 0)
 if SERVER then
     function ENT:Initialize()
         self:SetModel(self.Model)

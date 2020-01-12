@@ -9,9 +9,6 @@ function GB:InitGrid()
     LerpFloat(500, -.1, 1, function(pos)
         self.grid:SetPos(Vector(0, 0, pos))
     end, INTERPOLATION.SinLerp)
-
-    net.Start("CreateTile")
-    net.Broadcast()
 end
 
 function GB:ClearGrid()

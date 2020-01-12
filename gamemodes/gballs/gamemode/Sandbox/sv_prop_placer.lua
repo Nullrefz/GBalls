@@ -3,7 +3,7 @@ GB.heldProp = nil
 util.AddNetworkString("OnPropSelected")
 util.AddNetworkString("OnMoveToggled")
 util.AddNetworkString("OnMoving")
-local moveDistance = 1
+util.AddNetworkString("ObjectMoved")
 
 function GB:PlaceEntity(ent, pos, isHeld)
     ent:SetPos(pos)
@@ -25,19 +25,19 @@ function GB:SnapToGrid(ent)
 end
 
 function GB:CreateProp(propClass)
-    local tempPos = self.heldProp:GetPos() or Vector(0, 0, 0)
+    local tempPos = self.heldProp and self.heldProp:GetPos() or Vector(0, 0, 0)
     self:ClearHeldProp()
     self.heldProp = ents.Create(propClass)
     self.heldProp:Spawn()
     self.heldProp:SetPos(tempPos)
     self:SnapToGrid(self.heldProp)
+    net.Start("CreateTile")
+    net.WriteVector(self.heldProp.Size)
+    net.Broadcast()
 end
 
-function GB:MoveProp(x, y)
-    moveDistance = moveDistance + 1 * FrameTime()
-    print(moveDistance)
-    self.heldProp:SetPos(self.heldProp:GetPos() + Vector(16, 0, 0) * moveDistance)
-    self:SnapToGrid(self.heldProp)
+function GB:MoveProp(pos)
+    self.heldProp:SetPos(pos - Vector(self.tileSize, self.tileSize, 0) / 2)
 end
 
 function GB:DrawGizmo(show)
@@ -101,14 +101,10 @@ end)
 
 net.Receive("OnMoving", function()
     local enabled = net.ReadBool()
+    if enabled then end
+end)
 
-    if enabled then
-        moveDistance = 1
-
-        hook.Add("Think", "MoveObject", function()
-            GB:MoveProp()
-        end)
-    else
-        hook.Remove("Think", "MoveObject")
-    end
+net.Receive("ObjectMoved", function()
+    print("received")
+    GB:MoveProp(net.ReadVector())
 end)
