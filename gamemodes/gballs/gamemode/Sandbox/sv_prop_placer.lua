@@ -4,10 +4,10 @@ util.AddNetworkString("OnPropSelected")
 util.AddNetworkString("OnMoveToggled")
 util.AddNetworkString("OnMoving")
 util.AddNetworkString("ObjectMoved")
+util.AddNetworkString("ObjectPlaced")
 
 function GB:PlaceEntity(ent, pos, isHeld)
     ent:SetPos(pos)
-    table.insert(self.placedProps, ent)
 
     if isHeld then
         self:ClearHeldProp()
@@ -25,7 +25,7 @@ function GB:SnapToGrid(ent)
 end
 
 function GB:CreateProp(propClass)
-    local tempPos = self.heldProp and self.heldProp:GetPos() or Vector(0, 0, 0)
+    local tempPos = IsValid(self.heldProp) and self.heldProp:GetPos() or Vector(0, 0, 0)
     self:ClearHeldProp()
     self.heldProp = ents.Create(propClass)
     self.heldProp:Spawn()
@@ -38,6 +38,19 @@ end
 
 function GB:MoveProp(pos)
     self.heldProp:SetPos(pos - Vector(self.tileSize, self.tileSize, 0) / 2)
+end
+
+function GB:PlaceProp(placed)
+    if not self.heldProp then return end
+
+    if not placed then
+        self.heldProp:Remove()
+
+        return
+    end
+
+    table.insert(self.placedProps, ent)
+    self.heldProp = nil
 end
 
 function GB:DrawGizmo(show)
@@ -105,6 +118,10 @@ net.Receive("OnMoving", function()
 end)
 
 net.Receive("ObjectMoved", function()
-    print("received")
     GB:MoveProp(net.ReadVector())
+end)
+
+net.Receive("ObjectPlaced", function()
+    local placed = net.ReadBool()
+    GB:PlaceProp(placed)
 end)
