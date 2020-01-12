@@ -37,6 +37,8 @@ function GB:CreateProp(propClass)
 end
 
 function GB:MoveProp(pos)
+    self.heldProp:SetColor(Color(200, 200, 200, 50))
+    self.heldProp:SetRenderMode(RENDERMODE_TRANSALPHA)
     self.heldProp:SetPos(pos - Vector(self.tileSize, self.tileSize, 0) / 2)
 end
 
@@ -49,6 +51,7 @@ function GB:PlaceProp(placed)
         return
     end
 
+    self.heldProp:SetColor(Color(255, 255, 255, 255))
     table.insert(self.placedProps, ent)
     self.heldProp = nil
 end
