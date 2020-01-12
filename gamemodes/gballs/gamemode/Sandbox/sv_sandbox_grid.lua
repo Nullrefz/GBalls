@@ -7,7 +7,7 @@ function GB:InitGrid()
     if not IsValid(self.grid) then return end
     self.grid:Spawn()
 
-    LerpFloat(500, 0, 1, function(pos)
+    LerpFloat(500, -1, 1, function(pos)
         self.grid:SetPos(Vector(0, 0, pos))
     end, INTERPOLATION.SinLerp)
 end
@@ -18,7 +18,7 @@ function GB:ClearGrid()
 end
 
 function GB:GetTile(pos)
-    local tile = Vector(math.floor(pos.x / self.tileSize), math.floor(pos.y / self.tileSize), 0) * self.tileSize + Vector(self.tileSize / 2, self.tileSize / 2, 0)
+    local tile = Vector(math.floor(pos.x / self.tileSize), math.floor(pos.y / self.tileSize), 0, 0)
     return tile
 end
 

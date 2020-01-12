@@ -2,6 +2,8 @@ GB.placedProps = {}
 GB.heldProp = nil
 util.AddNetworkString("OnPropSelected")
 util.AddNetworkString("OnMoveToggled")
+util.AddNetworkString("OnMoving")
+local moveDistance = 0
 
 function GB:PlaceEntity(ent, pos, isHeld)
     ent:SetPos(pos)
@@ -11,10 +13,16 @@ function GB:PlaceEntity(ent, pos, isHeld)
         self:ClearHeldProp()
         self.heldProp = ent
     end
+
+    self:SnapToGrid(ent)
 end
 
 function GB:SnapToGrid(ent)
-    ent:SetPos(self:GetTile(ent:GetPos()))
+    if not IsValid(ent) then return end
+    local min, max = ent:GetModelBounds()
+    local midPoint = (Vector(max.x, max.y, 0) - Vector(min.x, min.y, 0)) / 2
+    local tile = self:GetTile(ent:GetPos() - Vector(midPoint.x, midPoint.y, 0) / 2)
+    ent:SetPos(tile * self.tileSize + Vector(midPoint.x, midPoint.y, 0))
 end
 
 function GB:CreateProp(propClass)
@@ -23,9 +31,14 @@ function GB:CreateProp(propClass)
     self.heldProp = ents.Create(propClass)
     self.heldProp:Spawn()
     self.heldProp:SetPos(tempPos)
+    self:SnapToGrid(self.heldProp)
 end
 
-function GB:MoveProp()
+function GB:MoveProp(x, y)
+    moveDistance = moveDistance + 1 * FrameTime()
+    self.heldProp:SetPos(self.heldProp:GetPos() + Vector(64, 0, 0) * moveDistance)
+    self:SnapToGrid(self.heldProp)
+    print(moveDistance)
 end
 
 function GB:DrawGizmo(show)
@@ -45,11 +58,11 @@ function GB:DrawGizmo(show)
     self.arrows = {}
 
     for i = 0, 3 do
-        local arrow = ents.Create("prop_dynamic")
-        arrow:SetModel("models/gballs/arrow.mdl")
+        local arrow = ents.Create("gb_gizmo")
         arrow:Spawn()
+        arrow:SetModel("models/gballs/Arrow_gizmo.mdl")
         arrow:SetAngles(Angle(0, i * 90, 0))
-        arrow:SetPos(Vector(midPoint.x, midPoint.y, 0) + arrow:GetAngles():Forward() * midPoint * 1.1)
+        arrow:SetPos(self.heldProp:GetPos() + arrow:GetAngles():Forward() * midPoint * 1.2)
         table.insert(self.arrows, arrow)
     end
 end
@@ -76,4 +89,18 @@ end)
 
 net.Receive("OnMoveToggled", function()
     GB:DrawGizmo(net.ReadBool())
+end)
+
+net.Receive("OnMoving", function()
+    local enabled = net.ReadBool()
+
+    if enabled then
+        moveDistance = 0
+
+        hook.Add("Think", "MoveObject", function()
+            GB:MoveProp()
+        end)
+    else
+        hook.Remove("Think", "MoveObject")
+    end
 end)

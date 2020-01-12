@@ -42,6 +42,12 @@ function GBSANDBOXTOOLS:MakeFocusButton()
     focusButton:SetColors(gb.green, gb.white)
     focusButton:SetKey(KEY_F)
 
+    focusButton:SetAction(function()
+        if not IsValid(GB.selectedObject) then return end
+        GB.sandboxCamera:SetTarget(GB.selectedObject)
+
+    end)
+
     return focusButton
 end
 

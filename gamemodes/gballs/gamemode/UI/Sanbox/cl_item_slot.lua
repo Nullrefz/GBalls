@@ -83,9 +83,14 @@ function ITEMSLOT:SetEntity(class)
     local ent = ents.CreateClientside(class)
     if not IsValid(ent) then return end
     self.modelPanel:SetModel(ent.Model)
-    self.modelPanel:SetLookAt(Vector(-self.modelPanel:GetEntity():GetModelBounds().x / 2, -self.modelPanel:GetEntity():GetModelBounds().y / 2, 0))
-    function self.modelPanel:LayoutEntity( Entity ) return end -- disables default rotation
-    self.modelPanel:SetCamPos(Vector(-self.modelPanel:GetEntity():GetModelBounds().x / 2, -self.modelPanel:GetEntity():GetModelBounds().y / 2, -self.modelPanel:GetEntity():GetModelBounds().x * 2))
+    self.modelPanel:SetLookAt(Vector(0, 0, 0))
+
+    -- disables default rotation
+    function self.modelPanel:LayoutEntity(Entity)
+        return
+    end
+
+    self.modelPanel:SetCamPos(Vector(0, 0, -self.modelPanel:GetEntity():GetModelBounds().x * 2))
     ent:Remove()
 end
 

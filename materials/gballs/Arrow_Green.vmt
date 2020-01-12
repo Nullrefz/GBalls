@@ -1,0 +1,15 @@
+"VertexLitGeneric"
+{
+// File Created by Wall Worm Pro ( http://dev.wallworm.com )
+
+// BEGIN Color
+	"$color2" "{0.0 255.0 66.0}"
+// END Color
+
+
+// BEGIN Transparency
+	"$alpha" "0.75"
+// END Transparency
+
+
+}

@@ -3,8 +3,10 @@ ENT.Type = 'anim'
 ENT.Base = "gb_platform_square"
 ENT.Spawnable = true
 ENT.Model = Model('models/gballs/square_1x1.mdl')
+DEFINE_BASECLASS("gb_platform_square")
+
 if SERVER then
     function ENT:Initialize()
-        self:SetModel('models/gballs/square_1x1.mdl')
+        BaseClass.Initialize(self)
     end
 end
