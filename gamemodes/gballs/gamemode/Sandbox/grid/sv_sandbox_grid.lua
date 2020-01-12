@@ -1,6 +1,5 @@
 GB.grid = nil
-GB.tileSize = 64
-GB.GridSquareSize = 128
+util.AddNetworkString("CreateTile")
 
 function GB:InitGrid()
     self.grid = ents.Create("gb_grid")
@@ -10,15 +9,12 @@ function GB:InitGrid()
     LerpFloat(500, -1, 1, function(pos)
         self.grid:SetPos(Vector(0, 0, pos))
     end, INTERPOLATION.SinLerp)
+
+    net.Start("CreateTile")
+    net.Broadcast()
 end
 
 function GB:ClearGrid()
     if not self.grid then return end
     self.grid:Remove()
 end
-
-function GB:GetTile(pos)
-    local tile = Vector(math.floor(pos.x / self.tileSize), math.floor(pos.y / self.tileSize), 0, 0)
-    return tile
-end
-

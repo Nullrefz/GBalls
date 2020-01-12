@@ -3,7 +3,7 @@ GB.heldProp = nil
 util.AddNetworkString("OnPropSelected")
 util.AddNetworkString("OnMoveToggled")
 util.AddNetworkString("OnMoving")
-local moveDistance = 0
+local moveDistance = 1
 
 function GB:PlaceEntity(ent, pos, isHeld)
     ent:SetPos(pos)
@@ -19,10 +19,9 @@ end
 
 function GB:SnapToGrid(ent)
     if not IsValid(ent) then return end
-    local min, max = ent:GetModelBounds()
-    local midPoint = (Vector(max.x, max.y, 0) - Vector(min.x, min.y, 0)) / 2
-    local tile = self:GetTile(ent:GetPos() - Vector(midPoint.x, midPoint.y, 0) / 2)
-    ent:SetPos(tile * self.tileSize + Vector(midPoint.x, midPoint.y, 0))
+    local tile = self:GetTile(ent)
+    self:SetTile(ent, tile)
+    self:PositionGizmos()
 end
 
 function GB:CreateProp(propClass)
@@ -36,15 +35,13 @@ end
 
 function GB:MoveProp(x, y)
     moveDistance = moveDistance + 1 * FrameTime()
-    self.heldProp:SetPos(self.heldProp:GetPos() + Vector(64, 0, 0) * moveDistance)
-    self:SnapToGrid(self.heldProp)
     print(moveDistance)
+    self.heldProp:SetPos(self.heldProp:GetPos() + Vector(16, 0, 0) * moveDistance)
+    self:SnapToGrid(self.heldProp)
 end
 
 function GB:DrawGizmo(show)
     if not self.heldProp then return end
-    local min, max = self.heldProp:GetModelBounds()
-    local midPoint = (max - min) / 2
 
     if self.arrows then
         for k, v in pairs(self.arrows) do
@@ -61,9 +58,20 @@ function GB:DrawGizmo(show)
         local arrow = ents.Create("gb_gizmo")
         arrow:Spawn()
         arrow:SetModel("models/gballs/Arrow_gizmo.mdl")
-        arrow:SetAngles(Angle(0, i * 90, 0))
-        arrow:SetPos(self.heldProp:GetPos() + arrow:GetAngles():Forward() * midPoint * 1.2)
         table.insert(self.arrows, arrow)
+    end
+
+    self:PositionGizmos()
+end
+
+function GB:PositionGizmos()
+    if not self.arrows or self.arrows == {} then return end
+    local min, max = self.heldProp:GetModelBounds()
+    local midPoint = (Vector(max.x, max.y, 0) - Vector(min.x, min.y, 0)) / 2
+
+    for i = 1, 4 do
+        self.arrows[i]:SetAngles(Angle(0, (i - 1) * 90, 0))
+        self.arrows[i]:SetPos(self.heldProp:GetPos() + midPoint + self.arrows[i]:GetAngles():Forward() * midPoint * 1.2)
     end
 end
 
@@ -95,7 +103,7 @@ net.Receive("OnMoving", function()
     local enabled = net.ReadBool()
 
     if enabled then
-        moveDistance = 0
+        moveDistance = 1
 
         hook.Add("Think", "MoveObject", function()
             GB:MoveProp()

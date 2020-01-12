@@ -35,12 +35,14 @@ end
 function GB.sandboxCamera:GetHoveredEntity()
     if not view.angles then return end
     local trace = self:GetMouseTrace(500)
+
     return trace.Entity
 end
 
 function GB.sandboxCamera:GetMouseTrace(distance)
-    local trace = util.QuickTrace(view.origin, (view.angles:Forward() + distance * gui.ScreenToVector(gui.MousePos())) * 1000, LocalPlayer())
+    local trace = util.QuickTrace(view.origin, view.angles:Forward() + distance * gui.ScreenToVector(gui.MousePos()), LocalPlayer())
     debugoverlay.Line(trace.StartPos, trace.HitPos)
+
     return trace
 end
 

@@ -34,7 +34,6 @@ if SERVER then
         self.phys = self:GetPhysicsObject()
         local radius = self:GetModelRadius()
         self:PhysicsInitSphere(radius, self.phys:GetMaterial())
-        self.phys = self:GetPhysicsObject()
         self.maxSpeed = GetConVar('gb_max_speed'):GetInt()
         self.damping = GetConVar('gb_interia_dampening'):GetFloat()
         self.gravity = (GetConVar('gb_gravity'):GetInt() / 100) * self.phys:GetMass()
