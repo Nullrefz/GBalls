@@ -7,9 +7,6 @@ $scale 1.0
 $modelname	"gballs/rotate_gizmo.mdl"
 $origin -32 -95.99999237060547 0 0 
 $body rotate_gizmo "rotate_gizmo.smd"
-$collisionmodel "rotate_gizmo.smd" {
-
-}
 $contents "solid"
 $cdmaterials "gballs"
 $sequence idle "rotate_gizmo.smd"  activity ACT_IDLE -1 loop fps 30
