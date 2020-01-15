@@ -16,6 +16,7 @@ function GB:CreateTile(sizeX, sizeY)
     self:SetTilePos(self.tiles, sizeX, sizeY)
 
     hook.Add("CreateMove", "PlaceTile", function()
+        if self.UIHovered then return end
         self:SetTilePos(self.tiles, sizeX, sizeY)
 
         if input.WasMousePressed(MOUSE_LEFT) and self:ValidatePos() then

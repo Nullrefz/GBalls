@@ -1,5 +1,4 @@
 SANDBOXMENU = {}
-
 function SANDBOXMENU:Init()
     function self:Paint(width, height)
         draw.DrawRect(0, 0, width, height, gb.blackNotch2)
@@ -65,6 +64,9 @@ function SANDBOXMENU:Init()
     self.tools = vgui.Create("gb_sandboxtools", self)
     self.tools:Dock(TOP)
     self.tools:SetTall(toVRatio(62))
+end
+function SANDBOXMENU:Think()
+    GB.UIHovered = self:IsChildHovered()
 end
 
 vgui.Register("gb_sandboxmenu", SANDBOXMENU)

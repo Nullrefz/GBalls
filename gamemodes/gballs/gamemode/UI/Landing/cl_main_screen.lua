@@ -1,4 +1,5 @@
 MAINSCREEN = {}
+GB.UIHovered = false
 
 local mats = {
     Exit = Material("gballs/icons/exit.png", "smooth"),
