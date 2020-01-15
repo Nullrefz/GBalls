@@ -4,15 +4,20 @@ GM.Email = "davidmoussa@outlook.com"
 GM.Website = "N/A"
 GB = {}
 
-team.SetUp(1, "balls", Color(255, 255, 255))
+GB.GizmoMode = {
+    Translate = 1,
+    Rotate = 2,
+    Scale = 3,
+    None = 4
+}
 
+team.SetUp(1, "balls", Color(255, 255, 255))
 local gmDir = "gballs/gamemode"
 
 --[[---------------------------------------------------------
     Name: jailbreak:AutoInclude()
     Desc: Includes server, client, and shared files
 -----------------------------------------------------------]]
-
 function GB:AutoInclude(dir)
     if not dir then
         dir = gmDir

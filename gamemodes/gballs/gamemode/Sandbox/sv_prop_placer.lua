@@ -1,10 +1,13 @@
 GB.placedProps = {}
 GB.heldProp = nil
+GB.higlightedObject = nil
 util.AddNetworkString("OnPropSelected")
 util.AddNetworkString("OnMoveToggled")
 util.AddNetworkString("OnMoving")
 util.AddNetworkString("ObjectMoved")
 util.AddNetworkString("ObjectPlaced")
+util.AddNetworkString("ObjectHeld")
+GB.currentGizmo = GB.GizmoMode.None
 
 function GB:PlaceEntity(ent, pos, isHeld)
     ent:SetPos(pos)
@@ -31,6 +34,16 @@ function GB:CreateProp(propClass)
     self.heldProp:Spawn()
     self.heldProp:SetPos(tempPos)
     self:SnapToGrid(self.heldProp)
+    self:CreateTile()
+end
+
+function GB:TranslateProp(ent)
+    if not IsValid(ent) then return end
+    self.heldProp = ent
+    self:CreateTile()
+end
+
+function GB:CreateTile()
     net.Start("CreateTile")
     net.WriteVector(self.heldProp.Size)
     net.Broadcast()
@@ -43,6 +56,7 @@ function GB:MoveProp(pos)
 end
 
 function GB:PlaceProp(placed)
+    GB.currentGizmo = GB.GizmoMode.None
     if not self.heldProp then return end
 
     if not placed then
@@ -52,7 +66,11 @@ function GB:PlaceProp(placed)
     end
 
     self.heldProp:SetColor(Color(255, 255, 255, 255))
-    table.insert(self.placedProps, ent)
+
+    if not table.HasValue(self.placedProps, self.heldProp) then
+        table.insert(self.placedProps, self.heldProp)
+    end
+
     self.heldProp = nil
 end
 
@@ -105,6 +123,8 @@ function GB:ClearHeldProp()
     if self.heldProp and IsValid(self.heldProp) then
         self.heldProp:Remove()
     end
+
+    self.heldProp = nil
 end
 
 net.Receive("OnPropSelected", function()
@@ -112,12 +132,12 @@ net.Receive("OnPropSelected", function()
 end)
 
 net.Receive("OnMoveToggled", function()
-    GB:DrawGizmo(net.ReadBool())
-end)
-
-net.Receive("OnMoving", function()
     local enabled = net.ReadBool()
-    if enabled then end
+    GB.currentGizmo = enabled and GB.GizmoMode.Translate or GB.GizmoMode.None
+
+    if enabled then
+        GB:TranslateProp(GB.higlightedObject)
+    end
 end)
 
 net.Receive("ObjectMoved", function()
@@ -127,4 +147,10 @@ end)
 net.Receive("ObjectPlaced", function()
     local placed = net.ReadBool()
     GB:PlaceProp(placed)
+end)
+
+net.Receive("ObjectHeld", function()
+    GB.higlightedObject = net.ReadEntity()
+    print(GB.higlightedObject)
+    hook.Run("OnObjectSelected", GB.higlightedObject)
 end)
