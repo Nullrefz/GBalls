@@ -7,6 +7,9 @@ $scale 1.0
 $modelname	"gballs/arrow_gizmo.mdl"
 $origin -31.99999809265137 -95.99999237060547 3.457069396972656e-06 0 
 $body arrow_gizmo "arrow_gizmo.smd"
+$collisionmodel "arrow_gizmo.smd" {
+
+}
 $contents "solid"
 $cdmaterials "gballs"
 $sequence idle "arrow_gizmo.smd"  activity ACT_IDLE -1 loop fps 30

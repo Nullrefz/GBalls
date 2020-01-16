@@ -7,6 +7,9 @@ $scale 1.0
 $modelname	"gballs/gridtile.mdl"
 $origin -96 -95.99999237060547 3.457069396972656e-06 0 
 $body gridtile "gridtile.smd"
+$collisionmodel "gridtile.smd" {
+
+}
 $contents "solid"
 $cdmaterials "gballs"
 $sequence idle "gridtile.smd"  activity ACT_IDLE -1 loop fps 30
