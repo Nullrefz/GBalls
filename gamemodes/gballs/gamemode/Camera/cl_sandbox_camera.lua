@@ -34,7 +34,7 @@ end
 
 function GB.sandboxCamera:GetHoveredEntity(filter)
     if not view.angles then return end
-    local trace = self:GetMouseTrace(500, filter)
+    local trace = self:GetMouseTrace(50000, filter)
 
     return trace.Entity
 end
