@@ -6,7 +6,7 @@ function GB:InitGrid()
     if not IsValid(self.grid) then return end
     self.grid:Spawn()
 
-    LerpFloat(500, -.1, 1, function(pos)
+    LerpFloat(500, -10.2, 1, function(pos)
         self.grid:SetPos(Vector(0, 0, pos))
     end, INTERPOLATION.SinLerp)
 end

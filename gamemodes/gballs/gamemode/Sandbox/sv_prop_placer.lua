@@ -11,12 +11,12 @@ GB.currentGizmo = GB.GizmoMode.None
 
 function GB:PlaceEntity(ent, pos, isHeld)
     ent:SetPos(pos)
-    
+
     if isHeld then
         self:ClearHeldProp()
         self.heldProp = ent
     end
-    
+
     self:SnapToGrid(ent)
 end
 
@@ -46,12 +46,13 @@ end
 function GB:TranslateProp(ent)
     if not IsValid(ent) then return end
     self.heldProp = ent
-    self:CreateTile()
+    self:CreateTile(ent)
 end
 
-function GB:CreateTile()
+function GB:CreateTile(ent)
     net.Start("CreateTile")
     net.WriteVector(self.heldProp.Size)
+    net.WriteEntity(ent)
     net.Broadcast()
 end
 
@@ -64,23 +65,25 @@ end
 
 function GB:PlaceProp(placed)
     if not self.heldProp then return end
+
     if not placed then
         self.heldProp:Remove()
-        
+
         return
     end
-    
+
     self.heldProp:SetColor(Color(255, 255, 255, 255))
-    
+
     if not table.HasValue(self.placedProps, self.heldProp) then
         table.insert(self.placedProps, self.heldProp)
     end
+
     self:SelectProp()
 end
 
 function GB:DrawGizmo(show)
     if not self.heldProp then return end
-    
+
     if self.arrows then
         for k, v in pairs(self.arrows) do
             if IsValid(v) then
@@ -88,17 +91,17 @@ function GB:DrawGizmo(show)
             end
         end
     end
-    
+
     if not show then return end
     self.arrows = {}
-    
+
     for i = 0, 3 do
         local arrow = ents.Create("gb_gizmo")
         arrow:Spawn()
         arrow:SetModel("models/gballs/Arrow_gizmo.mdl")
         table.insert(self.arrows, arrow)
     end
-    
+
     self:PositionGizmos()
 end
 
@@ -106,7 +109,7 @@ function GB:PositionGizmos()
     if not self.arrows or self.arrows == {} then return end
     local min, max = self.heldProp:GetModelBounds()
     local midPoint = (Vector(max.x, max.y, 0) - Vector(min.x, min.y, 0)) / 2
-    
+
     for i = 1, 4 do
         self.arrows[i]:SetAngles(Angle(0, (i - 1) * 90, 0))
         self.arrows[i]:SetPos(self.heldProp:GetPos() + midPoint + self.arrows[i]:GetAngles():Forward() * midPoint * 1.2)
@@ -119,7 +122,7 @@ function GB:ClearProps()
             v:Remove()
         end
     end
-    
+
     self:ClearHeldProp()
 end
 
@@ -127,7 +130,7 @@ function GB:ClearHeldProp()
     if self.heldProp and IsValid(self.heldProp) then
         self.heldProp:Remove()
     end
-    
+
     self.heldProp = nil
 end
 
@@ -138,8 +141,9 @@ end)
 net.Receive("OnMoveToggled", function()
     local enabled = net.ReadBool()
     GB.currentGizmo = enabled and GB.GizmoMode.Translate or GB.GizmoMode.None
+
     if enabled then
-        GB:TranslateProp( GB.heldProp)
+        GB:TranslateProp(GB.heldProp)
     end
 end)
 
@@ -154,5 +158,10 @@ end)
 
 net.Receive("ObjectHeld", function()
     GB.heldProp = net.ReadEntity()
+
+    if GB.currentGizmo == GB.GizmoMode.Translate then
+        GB:TranslateProp(GB.heldProp)
+    end
+
     hook.Run("OnObjectSelected", GB.heldProp)
 end)

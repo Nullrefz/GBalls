@@ -1,3 +1,5 @@
+local canPlace = true
+
 function GB:CreateTile(sizeX, sizeY)
     self:RemoveTiles()
     self.tiles = {}
@@ -19,7 +21,7 @@ function GB:CreateTile(sizeX, sizeY)
         if self.UIHovered then return end
         self:SetTilePos(self.tiles, sizeX, sizeY)
 
-        if input.WasMousePressed(MOUSE_LEFT) and self:ValidatePos() then
+        if input.WasMousePressed(MOUSE_LEFT) and canPlace then
             self:PlaceProp(true)
         end
 
@@ -38,8 +40,17 @@ function GB:PlaceProp(place)
     net.SendToServer()
 end
 
-function GB:ValidatePos()
-    return true
+function GB:ValidatePos(ent)
+    local trace = {
+        start = ent:GetPos(),
+        endpos = ent:GetPos(),
+        filter = ent
+    }
+
+    local tr = util.TraceEntity(trace, ent)
+    if (tr.Hit) then return true end
+
+    return false
 end
 
 function GB:RemoveTiles()
@@ -57,6 +68,7 @@ local lastTile = Vector(0, 0, 0)
 function GB:SetTilePos(tiles, sizeX, sizeY)
     local tracePos = self.sandboxCamera:GetMouseTrace(5000).HitPos
     local mousePos = self:GetTile(tracePos)
+    canPlace = true
     if mousePos == lastTile then return end
     mousePos = lastTile
     local index = 1
@@ -67,6 +79,23 @@ function GB:SetTilePos(tiles, sizeX, sizeY)
             local tile = self:GetTile(tiles[index])
             self:SetTile(tiles[index], tile)
             tiles[index]:SetPos(tiles[index]:GetPos() + Vector(self.tileSize, self.tileSize, 0) / 2)
+            print(selectedEntity)
+
+            local trace = {
+                start = tiles[index]:GetPos() + Vector(0, 0, 1),
+                endpos = tiles[index]:GetPos() + Vector(0, 0, -0.1),
+                filter = {tiles[index], selectedEntity}
+            }
+
+            local tr = util.TraceLine(trace, tiles[index])
+
+            if (tr.Hit) then
+                tiles[index]:SetColor(Color(255, 0, 0))
+                canPlace = false
+            else
+                tiles[index]:SetColor(Color(0, 255, 0))
+            end
+
             index = index + 1
         end
     end
@@ -78,5 +107,6 @@ end
 
 net.Receive("CreateTile", function()
     local size = net.ReadVector()
+    selectedEntity = net.ReadEntity()
     GB:CreateTile(size.x, size.y)
 end)
