@@ -4,7 +4,11 @@ GB.UIHovered = false
 local mats = {
     Exit = Material("gballs/icons/exit.png", "smooth"),
     Back = Material("gballs/icons/back.png", "smooth"),
-    Circle = Material("gballs/icons/circle.png", "smooth")
+    Circle = Material("gballs/icons/circle.png", "smooth"),
+    Save = Material("gballs/icons/save.png", "smooth"),
+    Load = Material("gballs/icons/load.png", "smooth"),
+    Add = Material("gballs/icons/add.png", "smooth"),
+    Sandbox = Material("gballs/icons/sandbox.png", "smooth")
 }
 
 function MAINSCREEN:Init()
@@ -84,18 +88,22 @@ end
 
 function MAINSCREEN:SetSandbox()
     self.headerIndicator:SetColor(gb.sandboxColor)
-    self.createButton = vgui.Create("gb_iconbutton", self.headerBody)
-    self.createButton:SetMat(mats.Circle)
-
+    self.createButton = vgui.Create("gb_iconbuttonwide", self.headerBody)
+    self.createButton:SetColors(gb.addButton, gb.blackNotch2)
+    self.createButton:SetMat(mats.Add, "New")
+    self.createButton:SetWide(90)
     self.createButton:SetAction(function()
         self:Remove()
         GB.sandboxMenu:Show()
     end)
 
     self.createButton:Dock(LEFT)
-    self.createButton:DockMargin(10, 10, 10, 10)
-    self.loadButton = vgui.Create("gb_iconbutton", self.headerBody)
-    self.loadButton:SetMat(mats.Circle)
+    self.createButton:DockMargin(16, 16, 16, 16)
+    self.loadButton = vgui.Create("gb_iconbuttonwide", self.headerBody)
+    self.loadButton:SetColors(gb.loadButton, gb.blackNotch2)
+
+    self.loadButton:SetMat(mats.Load, "Load")
+    self.loadButton:SetWide(90)
 
     self.loadButton:SetAction(function()
         self:Remove()
@@ -103,9 +111,12 @@ function MAINSCREEN:SetSandbox()
     end)
 
     self.loadButton:Dock(LEFT)
-    self.loadButton:DockMargin(10, 10, 10, 10)
-    self.saveButton = vgui.Create("gb_iconbutton", self.headerBody)
-    self.saveButton:SetMat(mats.Circle)
+    self.loadButton:DockMargin(16, 16, 16, 16)
+    self.saveButton = vgui.Create("gb_iconbuttonwide", self.headerBody)
+    self.saveButton:SetColors(gb.saveButton, gb.blackNotch2)
+
+    self.saveButton:SetMat(mats.Save, "Save")
+    self.saveButton:SetWide(90)
 
     self.saveButton:SetAction(function()
         self:Remove()
@@ -113,7 +124,7 @@ function MAINSCREEN:SetSandbox()
     end)
 
     self.saveButton:Dock(LEFT)
-    self.saveButton:DockMargin(10, 10, 10, 10)
+    self.saveButton:DockMargin(16, 16, 16, 16)
     self.backButton = vgui.Create("gb_iconbutton", self.headerBody)
     self.backButton:SetMat(mats.Back)
     self.backButton:SetKey(KEY_ESCAPE)
@@ -126,9 +137,12 @@ function MAINSCREEN:SetSandbox()
     end)
 
     self.backButton:Dock(RIGHT)
-    self.backButton:DockMargin(10, 10, 10, 10)
-    self.editMode = vgui.Create("gb_iconbutton", self.headerBody)
-    self.editMode:SetMat(mats.Circle)
+    self.backButton:DockMargin(18, 18, 18, 18)
+    self.editMode = vgui.Create("gb_iconbuttonwide", self.headerBody)
+    self.editMode:SetColors(gb.editButton, gb.blackNotch2)
+
+    self.editMode:SetMat(mats.Sandbox, "Test")
+    self.editMode:SetWide(90)
 
     self.editMode:SetAction(function()
         self:Remove()
@@ -136,7 +150,7 @@ function MAINSCREEN:SetSandbox()
     end)
 
     self.editMode:Dock(RIGHT)
-    self.editMode:DockMargin(10, 10, 10, 10)
+    self.editMode:DockMargin(16, 16, 16, 16)
     self.editMenu = vgui.Create("gb_sandboxmenu", self.body)
     self.editMenu:Dock(BOTTOM)
     self.editMenu:SetTall(256)

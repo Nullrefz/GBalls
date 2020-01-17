@@ -79,8 +79,6 @@ function GB:SetTilePos(tiles, sizeX, sizeY)
             local tile = self:GetTile(tiles[index])
             self:SetTile(tiles[index], tile)
             tiles[index]:SetPos(tiles[index]:GetPos() + Vector(self.tileSize, self.tileSize, 0) / 2)
-            print(selectedEntity)
-
             local trace = {
                 start = tiles[index]:GetPos() + Vector(0, 0, 1),
                 endpos = tiles[index]:GetPos() + Vector(0, 0, -0.1),

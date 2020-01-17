@@ -1,5 +1,5 @@
 GB.sandboxCamera = {}
-CreateConVar("gb_sandboxcamera_distance", 64, FCVAR_USERINFO)
+CreateConVar("gb_sandboxcamera_distance", 128, FCVAR_USERINFO)
 CreateConVar("gb_sandboxcamera_z", 45, FCVAR_USERINFO)
 CreateConVar("gb_sandboxangle", 0, FCVAR_USERINFO)
 local lastPos = Vector(0, 0, 0)
