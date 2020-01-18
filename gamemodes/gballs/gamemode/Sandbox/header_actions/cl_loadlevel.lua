@@ -1,0 +1,3 @@
+function GB:LoadLevel()
+
+end

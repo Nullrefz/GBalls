@@ -44,7 +44,7 @@ end
 
 function ICONBUTTON:SetMat(mat, text)
     function self.panel:Paint(width, height)
-        draw.ChamferedBox(width / 2, height / 2, width, height, 2, self.unSelectedColor)
+        draw.ChamferedBox(width / 2, height / 2, width, height, 360, self.unSelectedColor)
 
         if self.hovered and not self.clicked then
             draw.ChamferedBox(width / 2, height / 2, width, height, 360, self.color)
