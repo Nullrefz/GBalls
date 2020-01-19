@@ -49,6 +49,7 @@ function MAINSCREEN:Init()
     self.body = vgui.Create("Panel", self)
     self.body:Dock(FILL)
     self:SetMainMenu()
+
 end
 
 function MAINSCREEN:SetMainMenu()
@@ -59,6 +60,7 @@ function MAINSCREEN:SetMainMenu()
     self.exitButton:Dock(RIGHT)
 
     function self.PerformLayout(width, height)
+        if not IsValid(self.exitButton) then return end
         self.exitButton:SetWide(self.exitButton:GetTall())
     end
 
@@ -117,8 +119,7 @@ function MAINSCREEN:SetSandbox()
     self.saveButton:SetWide(90)
 
     self.saveButton:SetAction(function()
-        self:Remove()
-        GB.sandboxMenu:Show()
+        GB:SaveLevel()
     end)
 
     self.saveButton:Dock(LEFT)
@@ -140,8 +141,7 @@ function MAINSCREEN:SetSandbox()
     self.publishButton:SetWide(110)
 
     self.publishButton:SetAction(function()
-        self:Remove()
-        GB.sandboxMenu:Show()
+        GB:SaveLevel()
     end)
 
     self.publishButton:Dock(RIGHT)
@@ -159,8 +159,12 @@ function MAINSCREEN:SetSandbox()
     self.editMode:Dock(RIGHT)
     self.editMode:DockMargin(16, 16, 16, 16)
     self.editMenu = vgui.Create("gb_sandboxmenu", self.body)
+    
+    self.Sidenotification = vgui.Create("gb_sidenotification", self.body)
+    self.Sidenotification:Dock(BOTTOM)
     self.editMenu:Dock(BOTTOM)
     self.editMenu:SetTall(256)
+
 end
 
 vgui.Register("gb_mainscreen", MAINSCREEN)

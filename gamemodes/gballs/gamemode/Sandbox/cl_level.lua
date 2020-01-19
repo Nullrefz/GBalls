@@ -1,0 +1,5 @@
+-- GB.Level = {
+--     Name = "",
+--     Type = GB.Gamemode.Race,
+--     Props = {}
+-- }
