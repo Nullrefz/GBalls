@@ -92,6 +92,7 @@ function MAINSCREEN:SetSandbox()
     self.createButton:SetColors(gb.addButton, gb.blackNotch2)
     self.createButton:SetMat(mats.Add, "New")
     self.createButton:SetWide(90)
+
     self.createButton:SetAction(function()
         GB:StartNewLevel()
     end)
@@ -100,7 +101,6 @@ function MAINSCREEN:SetSandbox()
     self.createButton:DockMargin(16, 16, 16, 16)
     self.loadButton = vgui.Create("gb_iconbuttonwide", self.headerBody)
     self.loadButton:SetColors(gb.loadButton, gb.blackNotch2)
-
     self.loadButton:SetMat(mats.Load, "Load")
     self.loadButton:SetWide(90)
 
@@ -113,7 +113,6 @@ function MAINSCREEN:SetSandbox()
     self.loadButton:DockMargin(16, 16, 16, 16)
     self.saveButton = vgui.Create("gb_iconbuttonwide", self.headerBody)
     self.saveButton:SetColors(gb.saveButton, gb.blackNotch2)
-
     self.saveButton:SetMat(mats.Save, "Save")
     self.saveButton:SetWide(90)
 
@@ -137,9 +136,20 @@ function MAINSCREEN:SetSandbox()
 
     self.backButton:Dock(RIGHT)
     self.backButton:DockMargin(18, 18, 18, 18)
+    self.publishButton = vgui.Create("gb_iconbuttonwide", self.headerBody)
+    self.publishButton:SetColors(gb.saveButton, gb.blackNotch2)
+    self.publishButton:SetMat(mats.Save, "Publish")
+    self.publishButton:SetWide(110)
+
+    self.publishButton:SetAction(function()
+        self:Remove()
+        GB.sandboxMenu:Show()
+    end)
+
+    self.publishButton:Dock(RIGHT)
+    self.publishButton:DockMargin(16, 16, 16, 16)
     self.editMode = vgui.Create("gb_iconbuttonwide", self.headerBody)
     self.editMode:SetColors(gb.editButton, gb.blackNotch2)
-
     self.editMode:SetMat(mats.Sandbox, "Test")
     self.editMode:SetWide(90)
 

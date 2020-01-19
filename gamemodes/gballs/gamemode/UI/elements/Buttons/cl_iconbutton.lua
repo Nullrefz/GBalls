@@ -10,6 +10,7 @@ function ICONBUTTON:Init()
     self.panel:SetText("")
     self.panel.selectedColor = Color(255, 50, 50)
     self.panel.unSelectedColor = Color(255, 255, 255)
+    self.panel.hoveredColor = Color(255, 255, 255, 50)
     self.panel.color = self.panel.unSelectedColor
     self.panel.hovered = false
     self.panel.clicked = false
@@ -38,9 +39,11 @@ function ICONBUTTON:PerformLayout(width, height)
     self.panel:Center()
 end
 
-function ICONBUTTON:SetColors(selected, unselected)
+function ICONBUTTON:SetColors(selected, unselected, hovered)
     self.panel.selectedColor = selected
     self.panel.unSelectedColor = unselected
+    self.panel.color = self.panel.unSelectedColor
+    self.panel.hoveredColor = hovered and hovered or self.panel.hoveredColor
 end
 
 function ICONBUTTON:SetMat(mat)
@@ -48,7 +51,7 @@ function ICONBUTTON:SetMat(mat)
         draw.DrawRect(0, 0, width, height, self.color, mat)
 
         if self.hovered and not self.clicked then
-            draw.DrawRect(0, 0, width, height, Color(255, 255, 255, 50), mat)
+            draw.DrawRect(0, 0, width, height, self.hoveredColor, mat)
         end
     end
 end
@@ -83,6 +86,7 @@ function ICONBUTTON:SetKey(key)
                 self.panel:DoClick()
             end
         end
+
         if input.WasMousePressed(MOUSE_LEFT) then
             self.panel.clicked = true
         elseif input.WasMouseReleased(MOUSE_LEFT) then
