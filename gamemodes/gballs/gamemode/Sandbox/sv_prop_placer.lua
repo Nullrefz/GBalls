@@ -1,4 +1,3 @@
-GB.placedProps = {}
 GB.heldProp = nil
 util.AddNetworkString("OnPropSelected")
 util.AddNetworkString("PropSelection")
@@ -65,17 +64,12 @@ end
 
 function GB:PlaceProp(placed)
     if not self.heldProp then return end
-
-    if not placed then
-        self.heldProp:Remove()
-
-        return
-    end
-
     self.heldProp:SetColor(Color(255, 255, 255, 255))
 
-    if not table.HasValue(self.placedProps, self.heldProp) then
-        table.insert(self.placedProps, self.heldProp)
+    if placed then
+        self:UpdateProp(self.heldProp)
+    else
+        self:DeleteProp(self.heldProp)
     end
 
     self:SelectProp()

@@ -129,9 +129,7 @@ function MAINSCREEN:SetSandbox()
     self.backButton:SetColors(gb.red, gb.white)
 
     self.backButton:SetAction(function()
-        net.Start("SetGame")
-        net.WriteInt(4, 16)
-        net.SendToServer()
+        GB:ExitSandbox()
     end)
 
     self.backButton:Dock(RIGHT)

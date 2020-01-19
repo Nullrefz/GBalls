@@ -43,7 +43,7 @@ function CONFIRMATIONPOPUP:Init()
     self.titleText.title = ""
 
     function self.titleText:Paint(width, height)
-        draw.DrawText(self.title, "Optimus36", width / 2, height / 3, gb.blackNotch2, TEXT_ALIGN_CENTER)
+        draw.DrawText(self.title, "Optimus36", width / 2, toVRatio(32), gb.blackNotch2, TEXT_ALIGN_CENTER)
     end
 
     self.buttonHolder = vgui.Create("Panel", self.panel)
